@@ -116,7 +116,7 @@ export function PerformanceAnalytics() {
                                 <span className="font-medium text-sm text-gray-900">{metric.name}</span>
                                 {getTrendIcon(metric.trend)}
                             </div>
-                            <Badge variant={getBadgeVariant(metric.value, metric.target)} className="text-xs">
+                            <Badge variant={getBadgeVariant(metric.value, metric.target)} className="text-xs" suppressHydrationWarning>
                                 {metric.value.toFixed(metric.unit === "/5.0" ? 1 : 0)}{metric.unit}
                             </Badge>
                         </div>
@@ -126,12 +126,13 @@ export function PerformanceAnalytics() {
                                 <div
                                     className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(metric.value, metric.target)}`}
                                     style={{ width: `${Math.min((metric.value / metric.target) * 100, 100)}%` }}
+                                    suppressHydrationWarning
                                 ></div>
                             </div>
                             <div className="flex items-center justify-between text-xs text-gray-600">
                                 <span>Target: {metric.target}{metric.unit}</span>
                                 <div className="flex items-center gap-1">
-                                    <span className={`${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                    <span className={`${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`} suppressHydrationWarning>
                                         {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
                                     </span>
                                     <span className="text-gray-400">vs last hour</span>

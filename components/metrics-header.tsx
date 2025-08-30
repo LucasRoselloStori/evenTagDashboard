@@ -1,8 +1,10 @@
 "use client"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { RefreshCw, Activity, Calendar, MapPin, Zap } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { RefreshCw, Activity, Calendar, MapPin, Zap, Headphones } from "lucide-react"
 import { useMounted } from "@/hooks/use-mounted"
+import { useState } from "react"
 
 interface MetricsHeaderProps {
   lastUpdate: Date | null
@@ -11,6 +13,7 @@ interface MetricsHeaderProps {
 
 export function MetricsHeader({ lastUpdate, isLive }: MetricsHeaderProps) {
   const mounted = useMounted()
+  const [isContactOpen, setIsContactOpen] = useState(false)
 
   return (
     <div className="glass-effect rounded-xl p-6 border shadow-lg bg-white/80 backdrop-blur-md">
@@ -52,6 +55,81 @@ export function MetricsHeader({ lastUpdate, isLive }: MetricsHeaderProps) {
               {mounted && lastUpdate ? lastUpdate.toLocaleTimeString("en-US") : "Loading..."}
             </p>
           </div>
+          
+          {/* Contact Support Button */}
+          <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 bg-gradient-to-r from-red-50 to-orange-50 border-red-300 hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 hover:text-white transition-all duration-300 shadow-md"
+              >
+                <Headphones className="h-4 w-4" />
+                Contact Support
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Headphones className="h-5 w-5 text-red-600" />
+                  Emergency Support
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-red-700">🚨 Emergency Contacts</h4>
+                  <div className="space-y-1 text-sm bg-red-50 p-3 rounded-lg border border-red-200">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Security:</span>
+                      <span className="font-mono text-red-700">+54 11 1234-5678</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Operations:</span>
+                      <span className="font-mono text-red-700">+54 11 1234-5679</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Technical:</span>
+                      <span className="font-mono text-red-700">+54 11 1234-5680</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Medical:</span>
+                      <span className="font-mono text-red-700">+54 11 1234-5681</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-blue-700">📻 Radio Channels</h4>
+                  <div className="space-y-1 text-sm bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Main Control:</span>
+                      <span className="font-mono text-blue-700">Channel 1</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Security:</span>
+                      <span className="font-mono text-blue-700">Channel 2</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Operations:</span>
+                      <span className="font-mono text-blue-700">Channel 3</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Technical:</span>
+                      <span className="font-mono text-blue-700">Channel 4</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="pt-2 border-t">
+                  <p className="text-xs text-muted-foreground">
+                    🔥 <strong>Emergency:</strong> Use radio Channel 1 or call security immediately.<br/>
+                    📧 <strong>Non-urgent:</strong> support@devconnect.org
+                  </p>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
           <Button
             variant="outline"
             size="sm"

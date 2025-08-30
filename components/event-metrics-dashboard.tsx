@@ -41,21 +41,21 @@ export function EventMetricsDashboard() {
       <div className="max-w-7xl mx-auto space-y-6">
         <MetricsHeader lastUpdate={lastUpdate} isLive={isLive} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-8 gap-4 lg:gap-6 animate-fade-in">
-          {/* Total Attendance - slightly more width */}
-          <div className="lg:col-span-2 h-[600px]">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6 animate-fade-in">
+          {/* Total Attendance - more width, dynamic height */}
+          <div className="lg:col-span-2 min-h-[600px] flex">
             <AttendanceMetrics />
-          </div>
-
-          {/* Visual Heat Map - reduced width */}
-          <div className="lg:col-span-3 h-[600px]">
-            <VisualHeatmap />
           </div>
 
           {/* Metrics Chat - expanded width */}
           <div className="lg:col-span-3 h-[600px]">
             <MetricsChat ref={chatRef} />
           </div>
+        </div>
+
+        {/* Visual Heat Map - Full width row */}
+        <div className="w-full animate-fade-in">
+          <VisualHeatmap />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6 animate-fade-in mb-6">
