@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useMounted } from "@/hooks/use-mounted"
 
 interface ZoneInfo {
   id: string
@@ -17,6 +18,7 @@ interface ZoneInfo {
 }
 
 export function VisualHeatmap() {
+  const mounted = useMounted()
   const [selectedZone, setSelectedZone] = useState<string | null>(null)
   const [animationFrame, setAnimationFrame] = useState(0)
 
@@ -37,14 +39,16 @@ export function VisualHeatmap() {
     { id: "registration", name: "Registration", x: 255, y: 140, width: 25, height: 28, current: 5, capacity: 30, trend: "down" },
   ]
 
-  // Subtle animation for minimal movement
+  // Subtle animation for minimal movement - only on client
   useEffect(() => {
+    if (!mounted) return
+
     const interval = setInterval(() => {
       setAnimationFrame(prev => prev + 1)
     }, 3000) // Much slower, every 3 seconds
 
     return () => clearInterval(interval)
-  }, [])
+  }, [mounted])
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -64,6 +68,23 @@ export function VisualHeatmap() {
     if (percentage >= 70) return { label: "MEDIO", color: "bg-yellow-500", text: "text-black" }
     if (percentage >= 50) return { label: "NORMAL", color: "bg-blue-500", text: "text-white" }
     return { label: "BAJO", color: "bg-green-500", text: "text-white" }
+  }
+
+  if (!mounted) {
+    return (
+      <Card className="w-full border-orange-200 shadow-xl overflow-hidden">
+        <CardHeader className="pb-4 pt-6 bg-gradient-to-r from-orange-50 via-red-50 to-pink-50">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-2xl flex items-center gap-3 text-gray-800">
+              Live Heatmap - Event Zones
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="h-[400px] bg-gray-100 animate-pulse rounded-lg"></div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -99,24 +120,21 @@ export function VisualHeatmap() {
       <CardContent className="p-8">
         <div className="relative w-full h-[600px] rounded-xl border-2 border-gray-300 overflow-hidden mb-8"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='map-pattern' x='0' y='0' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0,0 L20,0 L20,20 L0,20 Z' fill='%23f8fafc' stroke='%23e2e8f0' stroke-width='0.5'/%3E%3Ccircle cx='10' cy='10' r='1' fill='%23cbd5e1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23map-pattern)'/%3E%3C/svg%3E")`,
-            backgroundColor: '#f1f5f9'
+            backgroundImage: "url('/plano2.jpeg')",
+            backgroundSize: '140%',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat'
           }}>
 
-          {/* Venue Layout Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-100/90 to-slate-200/90">
-            {/* Building structure overlay */}
-            <div className="absolute inset-4 border-4 border-dashed border-slate-400/50 rounded-lg bg-white/30"></div>
-            <div className="absolute top-8 left-8 right-8 h-16 border-2 border-slate-400/40 rounded bg-blue-50/50"></div>
-            <div className="absolute bottom-8 left-8 right-8 h-20 border-2 border-slate-400/40 rounded bg-green-50/50"></div>
+          {/* Semi-transparent overlay for better visibility of zones */}
+          <div className="absolute inset-0 bg-black/20"></div>
 
-            {/* Floor plan details */}
-            <div className="absolute top-4 left-4 px-2 py-1 bg-white/80 rounded text-xs font-semibold text-gray-600">
-              PLANTA BAJA - DevConnect Argentina 2025
-            </div>
-            <div className="absolute top-4 right-4 px-2 py-1 bg-white/80 rounded text-xs font-semibold text-gray-600">
-              🧭 North
-            </div>
+          {/* Floor plan details */}
+          <div className="absolute top-4 left-4 px-2 py-1 bg-white/90 rounded text-xs font-semibold text-gray-800 shadow-sm">
+            PLANTA BAJA - DevConnect Argentina 2025
+          </div>
+          <div className="absolute top-4 right-4 px-2 py-1 bg-white/90 rounded text-xs font-semibold text-gray-800 shadow-sm">
+            🧭 North
           </div>
 
           {/* Heatmap Canvas */}
@@ -127,28 +145,39 @@ export function VisualHeatmap() {
             >
               {/* Enhanced Definitions for better heatmap effect */}
               <defs>
-                <radialGradient id="heatLow" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#22c55e" stopOpacity="0.7" />
-                  <stop offset="70%" stopColor="#16a34a" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#15803d" stopOpacity="0.1" />
+                <radialGradient id="heatLow" cx="50%" cy="50%" r="80%">
+                  <stop offset="0%" stopColor="#22c55e" stopOpacity="0.8" />
+                  <stop offset="30%" stopColor="#16a34a" stopOpacity="0.7" />
+                  <stop offset="60%" stopColor="#15803d" stopOpacity="0.6" />
+                  <stop offset="85%" stopColor="#166534" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#14532d" stopOpacity="0.4" />
                 </radialGradient>
-                <radialGradient id="heatMedium" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-                  <stop offset="70%" stopColor="#d97706" stopOpacity="0.5" />
-                  <stop offset="100%" stopColor="#b45309" stopOpacity="0.2" />
+                <radialGradient id="heatMedium" cx="50%" cy="50%" r="80%">
+                  <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.9" />
+                  <stop offset="25%" stopColor="#f59e0b" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#eab308" stopOpacity="0.7" />
+                  <stop offset="75%" stopColor="#d97706" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#b45309" stopOpacity="0.5" />
                 </radialGradient>
-                <radialGradient id="heatHigh" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
-                  <stop offset="70%" stopColor="#dc2626" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#b91c1c" stopOpacity="0.3" />
+                <radialGradient id="heatHigh" cx="50%" cy="50%" r="80%">
+                  <stop offset="0%" stopColor="#fbbf24" stopOpacity="1" />
+                  <stop offset="20%" stopColor="#f59e0b" stopOpacity="0.95" />
+                  <stop offset="40%" stopColor="#eab308" stopOpacity="0.9" />
+                  <stop offset="70%" stopColor="#d97706" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#b45309" stopOpacity="0.7" />
                 </radialGradient>
-                <radialGradient id="heatCritical" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#dc2626" stopOpacity="1" />
-                  <stop offset="50%" stopColor="#b91c1c" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#991b1b" stopOpacity="0.4" />
+                <radialGradient id="heatCritical" cx="50%" cy="50%" r="80%">
+                  <stop offset="0%" stopColor="#7f1d1d" stopOpacity="1" />
+                  <stop offset="15%" stopColor="#991b1b" stopOpacity="0.95" />
+                  <stop offset="35%" stopColor="#b91c1c" stopOpacity="0.9" />
+                  <stop offset="60%" stopColor="#dc2626" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#f97316" stopOpacity="0.7" />
                 </radialGradient>
                 <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+                </filter>
+                <filter id="heatBlur" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
                 </filter>
                 <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
@@ -254,29 +283,9 @@ export function VisualHeatmap() {
 
                 return (
                   <g key={zone.id}>
-                    {/* Zone Boundary - Simple box */}
-                    <rect
-                      x={zone.x}
-                      y={zone.y}
-                      width={zone.width}
-                      height={zone.height}
-                      fill="transparent"
-                      stroke="#64748b"
-                      strokeWidth="2"
-                      className="cursor-pointer hover:stroke-blue-500 transition-colors"
-                      onClick={() => setSelectedZone(selectedZone === zone.id ? null : zone.id)}
-                    />
 
-                    {/* Invisible clickable area over entire zone */}
-                    <rect
-                      x={zone.x}
-                      y={zone.y}
-                      width={zone.width}
-                      height={zone.height}
-                      fill="transparent"
-                      className="cursor-pointer"
-                      onClick={() => setSelectedZone(selectedZone === zone.id ? null : zone.id)}
-                    />
+
+
 
 
 
@@ -285,63 +294,46 @@ export function VisualHeatmap() {
                       x={centerX}
                       y={zone.y - 5}
                       textAnchor="middle"
-                      fill="#1e293b"
+                      fill="white"
                       className="font-bold pointer-events-none"
                       style={{
                         fontSize: "5px",
-                        fontWeight: "600"
+                        fontWeight: "600",
+                        textShadow: "1px 1px 2px rgba(0,0,0,0.8)"
                       }}
                     >
                       {zone.name}
                     </text>
 
-                    {/* Heat Circle - color and size based on occupancy */}
+                    {/* Thermal Heat Circle - radial gradient from red center to green edges */}
                     <circle
                       cx={centerX}
                       cy={centerY - 1}
-                      r={Math.max(8, Math.min(20, 8 + (percentage / 100) * 12))}
-                      fill={percentage >= 90 ? '#dc2626' :
-                        percentage >= 75 ? '#ea580c' :
-                          percentage >= 60 ? '#f59e0b' :
-                            percentage >= 40 ? '#84cc16' : '#22c55e'}
-                      opacity={0.7 + (percentage / 100) * 0.3}
-                      filter="url(#blur)"
-                      className="transition-all duration-500"
+                      r={Math.max(12, Math.min(25, 12 + (percentage / 100) * 15))}
+                      fill={getHeatGradient()}
+                      filter="url(#heatBlur)"
+                      className="transition-all duration-1000"
                     />
 
-                    {/* People Count - center of zone, adaptive size */}
+                    {/* Percentage - center of zone, adaptive size, clickable */}
                     <text
                       x={centerX}
                       y={centerY - 1}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill="white"
-                      className="font-bold pointer-events-none"
+                      className="font-bold cursor-pointer hover:fill-yellow-200 transition-colors duration-200"
                       style={{
-                        fontSize: `${Math.max(6, Math.min(12, zone.width * 0.4))}px`,
+                        fontSize: `${Math.max(8, Math.min(16, zone.width * 0.5))}px`,
                         fontWeight: "800",
                         textShadow: "1px 1px 2px rgba(0,0,0,0.8)"
                       }}
-                    >
-                      {zone.current}
-                    </text>
-
-                    {/* Percentage below, adaptive size */}
-                    <text
-                      x={centerX}
-                      y={centerY + Math.max(6, zone.height * 0.3)}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fill="white"
-                      className="font-semibold pointer-events-none"
-                      style={{
-                        fontSize: `${Math.max(4, Math.min(8, zone.width * 0.25))}px`,
-                        fontWeight: "600",
-                        textShadow: "1px 1px 2px rgba(0,0,0,0.8)"
-                      }}
+                      onClick={() => setSelectedZone(selectedZone === zone.id ? null : zone.id)}
                     >
                       {Math.round(percentage)}%
                     </text>
+
+
                   </g>
                 )
               })}

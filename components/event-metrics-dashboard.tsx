@@ -43,12 +43,12 @@ export function EventMetricsDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6 animate-fade-in">
           {/* Total Attendance - more width, dynamic height */}
-          <div className="lg:col-span-2 min-h-[600px] flex">
+          <div className="lg:col-span-2 min-h-[450px] flex">
             <AttendanceMetrics />
           </div>
 
           {/* Metrics Chat - expanded width */}
-          <div className="lg:col-span-3 h-[600px]">
+          <div className="lg:col-span-3 min-h-[450px] flex">
             <MetricsChat ref={chatRef} />
           </div>
         </div>
@@ -70,20 +70,39 @@ export function EventMetricsDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 animate-fade-in">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 animate-fade-in">
           {/* Movement Flows */}
           <div className="lg:col-span-1">
             <MovementFlows />
           </div>
 
-          {/* Performance Analytics */}
-          <div className="lg:col-span-1">
-            <PerformanceAnalytics />
-          </div>
-
           {/* Hot Zones */}
           <div className="lg:col-span-1">
             <HeatmapZones />
+          </div>
+        </div>
+
+        {/* Post-Event Analytics Section */}
+        <div className="border-t border-gray-200 pt-8 mt-12">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">📊 Post-Event Analytics</h2>
+            <p className="text-gray-600 text-sm">Métricas de análisis y rendimiento del evento</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 animate-fade-in">
+            {/* Performance Analytics */}
+            <div className="lg:col-span-1">
+              <PerformanceAnalytics />
+            </div>
+
+            {/* Future post-event metrics can be added here */}
+            <div className="lg:col-span-2 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8">
+              <div className="text-center text-gray-500">
+                <div className="text-4xl mb-2">📈</div>
+                <h3 className="font-semibold mb-1">Upcoming Metrics</h3>
+                <p className="text-sm">More post-event analytics coming soon</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

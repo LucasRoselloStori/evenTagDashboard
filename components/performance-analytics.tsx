@@ -101,11 +101,14 @@ export function PerformanceAnalytics() {
     }, [])
 
     return (
-        <Card className="h-full border-green-200 shadow-lg">
-            <CardHeader className="pb-4 pt-4 bg-gradient-to-r from-green-50 to-emerald-50">
+        <Card className="h-full border-amber-200 shadow-lg">
+            <CardHeader className="pb-4 pt-4 bg-gradient-to-r from-amber-50 to-orange-50">
                 <CardTitle className="text-lg flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-green-600" />
+                    <Activity className="h-5 w-5 text-amber-600" />
                     Performance Analytics
+                    <Badge variant="outline" className="text-xs bg-amber-100 text-amber-700 border-amber-300">
+                        Post-Event
+                    </Badge>
                 </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-4 h-full overflow-y-auto">

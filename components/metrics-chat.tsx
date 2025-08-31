@@ -258,7 +258,7 @@ export const MetricsChat = forwardRef<MetricsChatRef>((props, ref) => {
 
   return (
     <>
-      <Card className="h-[600px] flex flex-col border-blue-200 shadow-lg">
+      <Card className="h-full w-full flex flex-col border-blue-200 shadow-lg">
         <CardHeader className="pb-4 pt-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-cyan-50">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">

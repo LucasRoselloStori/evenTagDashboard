@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Bot, TrendingUp, Clock, Users, AlertTriangle, CheckCircle, MessageSquare, CheckCheck, UserPlus, Headphones } from "lucide-react"
+import { Bot, TrendingUp, Clock, Users, AlertTriangle, CheckCircle, MessageSquare, CheckCheck, UserPlus, Headphones, BarChart, Wifi, Award, Target, Zap, Thermometer, ShieldAlert } from "lucide-react"
 import { useState } from "react"
 
 interface KeyInsightsProps {
@@ -14,12 +14,12 @@ interface KeyInsightsProps {
 }
 
 export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsightsProps) {
-  const [assignments, setAssignments] = useState<{[key: number]: string}>({})
+  const [assignments, setAssignments] = useState<{ [key: number]: string }>({})
   const [isContactOpen, setIsContactOpen] = useState(false)
-  
+
   const teamMembers = [
     "Ana García (Security)",
-    "Carlos López (Operations)", 
+    "Carlos López (Operations)",
     "María Fernández (Guest Services)",
     "Diego Rodríguez (Technical)",
     "Sofia Martínez (Logistics)",
@@ -77,6 +77,106 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
       bgColor: "bg-red-50",
       canAssign: true,
     },
+    {
+      id: 5,
+      type: "insight",
+      icon: BarChart,
+      title: "Revenue Insight",
+      description: "Food Court generating $127/person vs $89 projected (+43% revenue)",
+      color: "text-chart-4",
+      bgColor: "bg-chart-4/10",
+      canAssign: false,
+    },
+    {
+      id: 6,
+      type: "warning",
+      icon: Wifi,
+      title: "Network Issue",
+      description: "WiFi bandwidth at 89% in Expo Hall. Potential connectivity issues",
+      color: "text-orange-600",
+      bgColor: "bg-orange-100",
+      canAssign: true,
+    },
+    {
+      id: 7,
+      type: "highlight",
+      icon: Award,
+      title: "Top Performance",
+      description: "Startup Showcase: 85% capacity + 4.9/5 rating + 25min avg engagement",
+      color: "text-purple-600",
+      bgColor: "bg-purple-100",
+      canAssign: false,
+    },
+    {
+      id: 8,
+      type: "insight",
+      icon: Target,
+      title: "Underutilized Zone",
+      description: "Dev Experience at 32% capacity. Consider promotional activities",
+      color: "text-chart-4",
+      bgColor: "bg-chart-4/10",
+      canAssign: false,
+    },
+    {
+      id: 9,
+      type: "success",
+      icon: Zap,
+      title: "Energy Efficiency",
+      description: "Smart systems reduced energy consumption by 23% vs baseline",
+      color: "text-chart-1",
+      bgColor: "bg-chart-1/10",
+      canAssign: false,
+    },
+    {
+      id: 10,
+      type: "warning",
+      icon: Thermometer,
+      title: "Climate Alert",
+      description: "Temperature rising in Web3 Stage (26°C). HVAC adjustment needed",
+      color: "text-orange-600",
+      bgColor: "bg-orange-100",
+      canAssign: true,
+    },
+    {
+      id: 11,
+      type: "insight",
+      icon: Users,
+      title: "Demographic Analysis",
+      description: "68% attendees aged 25-35, 23% above projections. Adjust content",
+      color: "text-chart-4",
+      bgColor: "bg-chart-4/10",
+      canAssign: false,
+    },
+    {
+      id: 12,
+      type: "alert",
+      icon: ShieldAlert,
+      title: "Security Notice",
+      description: "Unauthorized access attempt at Workshop Area. Security dispatch sent",
+      color: "text-red-600",
+      bgColor: "bg-red-50",
+      canAssign: true,
+    },
+    {
+      id: 13,
+      type: "success",
+      icon: MessageSquare,
+      title: "Social Engagement",
+      description: "Event hashtag trending #3 globally. 12K+ mentions in last hour",
+      color: "text-chart-1",
+      bgColor: "bg-chart-1/10",
+      canAssign: false,
+    },
+    {
+      id: 14,
+      type: "insight",
+      icon: Clock,
+      title: "Peak Time Prediction",
+      description: "AI forecasts 2:30 PM peak with 2,450 simultaneous attendees",
+      color: "text-chart-4",
+      bgColor: "bg-chart-4/10",
+      canAssign: false,
+    },
   ]
 
   const handleAssignment = (insightId: number, assignee: string) => {
@@ -87,8 +187,8 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
   }
 
   return (
-    <Card className="h-full border-purple-200 shadow-lg">
-      <CardHeader className="pb-4 pt-4 bg-gradient-to-r from-purple-50 to-pink-50">
+    <Card className="h-[500px] flex flex-col border-purple-200 shadow-lg">
+      <CardHeader className="pb-4 pt-4 bg-gradient-to-r from-purple-50 to-pink-50 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-lg flex items-center gap-2">
@@ -97,7 +197,7 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
             </CardTitle>
             <CardDescription>AI-powered analysis of attendee behavior patterns</CardDescription>
           </div>
-          
+
           {/* Contact Support Button */}
           <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
             <DialogTrigger asChild>
@@ -131,7 +231,7 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <h4 className="font-semibold">Radio Channels</h4>
                   <div className="space-y-1 text-sm">
@@ -149,7 +249,7 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="pt-2 border-t">
                   <p className="text-xs text-muted-foreground">
                     For immediate assistance, use radio Channel 1 or call the emergency number.
@@ -160,7 +260,7 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
           </Dialog>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-y-auto flex-1">
         <div className="space-y-4">
           {insights.map((insight) => (
             <div key={insight.id} className={`p-4 rounded-lg ${insight.bgColor} border border-border/50`}>
@@ -179,7 +279,7 @@ export function KeyInsights({ onAnalyzeInsight, onExpandAndAnalyze }: KeyInsight
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">{insight.description}</p>
-                  
+
                   {/* Assignment Section */}
                   {insight.canAssign && (
                     <div className="mt-2 pt-2 border-t border-border/30">
